@@ -1,0 +1,25 @@
+<%- include('./partials/head') %>
+<section>
+    <ul class="home-articles">
+        <% articles.forEach(article => {
+              { %>
+              <li>
+                <a href="/artikel/<%=article.slug%>">
+                  <h2><%-article.title.rendered%></h2>
+                    <p>
+                        <%= new Date(article.date).getDate()%>/
+                        <%= new Date(article.date).getMonth()%>/
+                        <%= new Date(article.date).getYear()%>
+                    </p>
+                  <section>
+                    <h3><%=article.yoast_head_json.author%>&nbsp;<span class="leestijd-articles"> - 3 min</span></h3>
+                    <button>></button>
+                  </section>
+                </a>
+                %>
+              </li>
+            <% }
+          }) %>
+    </ul>
+    
+<%- include('./partials/foot') %>

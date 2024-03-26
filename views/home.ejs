@@ -1,18 +1,17 @@
 <%- include('./partials/head') %>
 <main>
-  <div>
-    <ul>
-      <%articles.forEach(article => {
-        {%>
-        <li>
-          <a href="/artikel/<%=article.slug%>">
-            <h1><%-article.title.rendered%></h1>
-          </a>
-        </li>
-        <%}
-      })%>
-    </ul>
-  </div>
+  <ul class="hoofdpagina">
+    <%articles.forEach(article => {
+      {%>
+      <li>
+        <a href="/artikel/<%=article.slug%>">
+          <img src="<%=article.jetpack_featured_media_url%>">
+          <h1><%-article.title.rendered%></h1>
+        </a>
+      </li>
+      <%}
+    })%>
+  </ul>
 </main>
     
 <%- include('./partials/foot') %>

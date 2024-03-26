@@ -27,11 +27,11 @@ app.get('/', (request, response) => {
 app.get('/artikel/:slug', function (request, response) {
      fetchJson(apiPosts + '?slug=' + request.params.slug).then((apiData) => {
            response.render('article.ejs', {
-            article: apiData[0] 
+            article: apiData[0]
             // Door [0] te gebruiken hier, hoef je het niet in het ejs
             // bestand te gebruiken. Hiermee zorg je ervoor dat hij het eerste object pakt
-            
       })
+      
     })
   })
 

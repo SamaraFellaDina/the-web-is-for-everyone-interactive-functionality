@@ -1,29 +1,28 @@
 <%- include('./partials/head') %>
 
 <main>
-    <section class="article-detail">
+    <article>
+        <h1><%-article.title.rendered%></h1>
+        <img src="<%-article.jetpack_featured_media_url%>" alt="voorpagina afbeelding">
 
+        <div>
+            <a href="">vacatures</a>
+            
+            <time>
+                <%= new Date(article.date).getDate() %>/<%= new Date(article.date).getMonth() %>/<%= new
+                Date(article.date).getFullYear() %>
+            </time>
 
-        <div class="post">
             <form action="/article/<%=article.slug%>" method="post">
                 <input type="hidden" name="slug" value="<%-article.slug%>">
-                <label for="share"># keer geliked</label>
-                <button type="submit" id="share"><span>like dit artikel!</span></button>
+                <button type="submit" id="share">like dit artikel!</button>
             </form>
         </div>
 
+        <strong><%-article.excerpt.rendered%></strong>
 
 
-        <h1><%-article.title.rendered%></h1>
-        <img src="<%-article.jetpack_featured_media_url%>" alt="voorpagina afbeelding">
-        <div class="article-detail_datetype">
-            <a href="">vacatures</a>
-            <p class="article-detail_time">11 maart 2024, 09:00</p>
-        </div>
-        <p class="article-detail_commercial">
-            Ben je taalvaardig? Heb je affiniteit met de media en journalistiek? Wil je aspirerende journalisten
-            helpen beter te worden? Dan zoekt Red Pers jou, als eindredacteur (x/v/m).
-        </p>
+
 
         <section class="article-detail_author">
             <section>
@@ -37,8 +36,7 @@
         <section class="article-detail_content">
             <%-article.content.rendered%>
         </section>
-
-    </section>
+    </article>
 </main>
 
 

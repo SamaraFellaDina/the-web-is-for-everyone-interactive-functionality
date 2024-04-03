@@ -15,6 +15,8 @@ const apiPosts = apiUrl + '/posts'
 const apiUsers = apiUrl + '/users'
 const apiCategories = apiUrl + '/categories'
 
+const apiShares = 'https://fdnd-agency.directus.app/items/redpers_shares'
+
 // Routes aanmaken
 app.get('/', (request, response) => {
     fetchJson(apiPosts).then((articleData) => {
@@ -25,39 +27,37 @@ app.get('/', (request, response) => {
 })
 
 app.get('/artikel/:slug', function (request, response) {
-     fetchJson(apiPosts + '?slug=' + request.params.slug).then((apiData) => {
-           response.render('article.ejs', {
-            article: apiData[0]
-            // Door [0] te gebruiken hier, hoef je het niet in het ejs
-            // bestand te gebruiken. Hiermee zorg je ervoor dat hij het eerste object pakt
-      })
-      
+    Promise.all([
+     fetchJson(apiPosts + '?slug=' + request.params.slug),
+     fetchJson(apiShares + "?filter[slug][_eq]=" + request.params.slug)
+    ]).then(([apiData, shareData ]) => {
+        response.render("article.ejs", {
+            article : apiData[0],
+            share : shareData.data[0].shares
+        });
     })
-  })
-
-//   maken van post
-let likes = []
-app.post('/artikel/:slug', function (request, response) {
-    let numberOfLikes = likes.find((like) => {
-        return like.slug == request.params.slug
-    })
-
-    if (huidig == undefined) {
-        likes.push({
-            slug: request.params.slug,
-            likes:1,
-        })
-    } 
-
-    else {
-        huidig.likes++
-    }
-
-    console.log(huidig)
-    response.send('post route naar afhandeling')
-    response.redirect(301, '/article/' + request.params.slug)
 })
 
+//   maken van post
+app.post('/article/:slug', (request, response) => {
+    fetchJson(apiShares + "?filter[slug][_eq]=" + request.params.slug).then(({data}) => {
+        console.log(data) 
+        fetchJson(apiShares + (data[0]?.id ? data[0].id : ''), {
+
+      // Doe een PATCH op directus, stuur de id mee als die er is.
+        method: data[0]?.id ? 'PATCH' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          slug: request.params.slug,
+          shares: data.length > 0 ? data[0].shares + 1 : 1,
+        }),
+      }).then((result) => {
+        console.log(result)
+      })
+    })
+    response.redirect(301, `/article/${request.params.slug}`)
+  })
+  
 // Een port aanroepen om alles op te hosten
 app.set('port', process.env.PORT || 8080)
 app.listen(app.get('port'), function () {

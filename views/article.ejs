@@ -15,7 +15,8 @@
 
             <form action="/article/<%=article.slug%>" method="post">
                 <input type="hidden" name="slug" value="<%-article.slug%>">
-                <button type="submit" id="share">like dit artikel!</button>
+                <label for="copy-link"><%= article.copy  %> keer gedeelt</label>
+                <button type="submit" id="share"><%-share%></button>
             </form>
         </div>
 

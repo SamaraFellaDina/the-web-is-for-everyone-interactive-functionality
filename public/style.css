@@ -121,6 +121,10 @@ footer ul{
 }
 
 @media (min-width: 768px ) {
+    article:first-child > :not(img):not(figure) { 
+        padding: 0;
+    }
+
     img {
         border-top: none;
         border-bottom: none;

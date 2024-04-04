@@ -20,10 +20,21 @@ const apiShares = 'https://fdnd-agency.directus.app/items/redpers_shares'
 // Routes aanmaken
 app.get('/', (request, response) => {
     fetchJson(apiPosts).then((articleData) => {
-        response.render('home.ejs', {
-            articles: articleData
+      fetchJson(apiShares).then((shareData) => {
+        articleData.map((articles) => {
+          Object.assign(articles, {
+            shares: shareData.data.find(({ slug }) => slug == articles.slug)?.shares || 0
+
+          })
+          // console.log(articles.share)
         })
+        response.render('home', {articles: articleData})
+      })
     })  
+})
+
+app.get('/article', (request, response) => {
+  response.redirect(301, '/')
 })
 
 app.get('/artikel/:slug', function (request, response) {
@@ -38,11 +49,12 @@ app.get('/artikel/:slug', function (request, response) {
     })
 })
 
+// https://github.com/ju5tu5/the-web-is-for-everyone-interactive-functionality
 //   maken van post
 app.post('/article/:slug', (request, response) => {
     fetchJson(apiShares + "?filter[slug][_eq]=" + request.params.slug).then(({data}) => {
-        console.log(data) 
-        fetchJson(apiShares + (data[0]?.id ? data[0].id : ''), {
+        // console.log(data[0]?.shares) 
+        fetchJson(apiShares + (data[0]?.id ? '/' + data[0].id : '/0'), {
 
       // Doe een PATCH op directus, stuur de id mee als die er is.
         method: data[0]?.id ? 'PATCH' : 'POST',
@@ -55,7 +67,7 @@ app.post('/article/:slug', (request, response) => {
         console.log(result)
       })
     })
-    response.redirect(301, `/article/${request.params.slug}`)
+    response.redirect(301, '/artikel/' + request.params.slug)
   })
   
 // Een port aanroepen om alles op te hosten

@@ -38,6 +38,10 @@ body {
     align-items: flex-start;
 }
 
+article:first-child > :not(img):not(figure) { 
+    padding: 0 2em;
+}
+
 h1,
 h2,
 h3,
@@ -64,6 +68,17 @@ img {
     width: 100%;
     border-top: var(--border-styles);
     border-bottom: var(--border-styles);
+    object-fit: cover;
+    height: auto;
+}
+
+figure {
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    unicode-bidi: isolate;
 }
 
 a {
